@@ -1,16 +1,32 @@
-# blabla
+import math
 
-#ook blabla
-
-false = '1 + 1 = 3'
+time = 0
 
 
 
 
-class field:
-    def __init__(self, height, width):
-        self.height = height
-        self.width = width
+class grid:
+    def __init__(self, cells, states):
+        self.cells = cells
+        self.states = states
 
-    def calculate_cells(self):
-        print("Number: ", self.height*self.width)
+
+class one_dimensional(grid):
+    def __init__(self, cells, states):
+        super().__init__(self, cells, states)
+        
+
+        
+class two_dimensional(grid):
+    
+
+    def __init__(self, cells, states):
+        super().__init__(self, cells, states)
+        row = colomn = int(math.sqrt(cells))
+        print(row)
+
+
+
+        
+
+Automata = two_dimensional(16, 2)

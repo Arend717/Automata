@@ -1,48 +1,39 @@
-# blabla
-
-#ook blabla
-
-false = '1 + 1 = 3'
-lol = 'hello'
-
-
-class field:
-    def __init__(self, height, width):
-        self.height = height
-        self.width = width
-
-    def calculate_cells(self):
-        print("Number: ", self.height*self.width)
-
 import math
 
-time = 0
-
-
-
-
 class grid:
-    def __init__(self, cells, states):
+    def __init__(self, cells, state):
         self.cells = cells
-        self.states = states
+        self.states = [range(0, state - 1)]
 
 
 class one_dimensional(grid):
-    def __init__(self, cells, states):
-        super().__init__(self, cells, states)
+    def __init__(self, cells, state):
+        super().__init__(self, cells, state)
         
 
         
 class two_dimensional(grid):
+    def __init__(self, cells, state):
+        super().__init__(cells, state)
+        rows = cols = int(math.sqrt(cells))
+        self.grid = [[0] * cols for _ in range(rows)]
+
+class cell():
+    def __init__(self, state = 0, coordinates):
+        self.state = state
     
-
-    def __init__(self, cells, states):
-        super().__init__(self, cells, states)
-        row = colomn = int(math.sqrt(cells))
-        print(row)
-
-
+    def is_alive(self) -> bool:
+        return self.state == 1 
+    
+    def set_alive(self):
+        self.state = 1
+    
+    def set_dead(self):
+        self.state = 0
+    
+    def toggle(self):
+        self.state = 1 - self.state
 
         
 
-Automata = two_dimensional(16, 2)
+Automata = two_dimensional(15, 2)

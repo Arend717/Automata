@@ -29,14 +29,6 @@ class one_dimensional(grid):
         
         self.grid = new_grid
 
-class two_dimensional(grid):
-    def __init__(self, cells, state):
-        super().__init__(cells, state)
-        rows = cols = int(math.sqrt(cells))
-        self.rows = rows
-        self.cols = cols
-        self.grid = [[0] * cols for _ in range(rows)]
-
 class hexagonal_grid(grid):
     def __init__(self, radius, state=2):
         cells = 1 + 3 * radius * (radius + 1)

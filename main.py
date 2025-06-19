@@ -1,3 +1,6 @@
+from two_dimensional import TwoDimensional
+
+
 import math
 
 class grid:
@@ -10,30 +13,28 @@ class one_dimensional(grid):
     def __init__(self, cells, state):
         super().__init__(self, cells, state)
         
+'''
+This dummy rule is only here as an example to show what kind of rules can be implemented
+In essence the rule has the following inputs:
+Cell_position, state, neighbor_states
+And the output should be a integer for the state of the cell
+'''
+def dummy_rule(cell_position, state, neighbor_states):
+    return (state + 1) % 2  # toggles between 0 and 1
+                            # Does not use the cell_position or neighbor_states in the calculation
 
-        
-class two_dimensional(grid):
-    def __init__(self, cells, state):
-        super().__init__(cells, state)
-        rows = cols = int(math.sqrt(cells))
-        self.grid = [[0] * cols for _ in range(rows)]
 
-class cell():
-    def __init__(self, state = 0, coordinates):
-        self.state = state
-    
-    def is_alive(self) -> bool:
-        return self.state == 1 
-    
-    def set_alive(self):
-        self.state = 1
-    
-    def set_dead(self):
-        self.state = 0
-    
-    def toggle(self):
-        self.state = 1 - self.state
-
-        
-
-Automata = two_dimensional(15, 2)
+# A Twodimensional cellular automata is created with a grid of 5 by 5.
+# This is an instance of the two_dimensional class
+# The dummy rule is given as input
+# The cellular automata has 2 states
+# The cellular automata has fixed boundaries
+ca = TwoDimensional((5,5), dummy_rule, 2, boundary='fixed')
+# A cell in the grid with coordinates 2,2 is put at 1
+ca.cells[2, 2] = 1
+# Initial state is being printed
+print("Initial state: ", ca.cells)
+# Evolve function is called on the cellular automata
+ca.evolve()
+# End state is being printed
+print("\nAfter one evolution step:", ca.cells)

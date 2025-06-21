@@ -1,14 +1,14 @@
 # File: Rule30_GameRules.py
 # This file contains the Rule 30 update logic
 
-"" 
+"""
 This version only draws the bottom row (as you would in a Rule 30 visualization).
 
 It uses a lookup table (dictionary) for the logic, as is common with Rule 30.
 
 cells[-2] is the second-to-last row — the last row is calculated from it.
 
-""
+"""
 
 import numpy as np
 

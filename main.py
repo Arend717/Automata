@@ -1,48 +1,40 @@
-# blabla
+from two_dimensional import TwoDimensional
 
-#ook blabla
-
-false = '1 + 1 = 3'
-lol = 'hello'
-
-
-class field:
-    def __init__(self, height, width):
-        self.height = height
-        self.width = width
-
-    def calculate_cells(self):
-        print("Number: ", self.height*self.width)
 
 import math
 
-time = 0
-
-
-
-
 class grid:
-    def __init__(self, cells, states):
+    def __init__(self, cells, state):
         self.cells = cells
-        self.states = states
+        self.states = [range(0, state - 1)]
 
 
 class one_dimensional(grid):
-    def __init__(self, cells, states):
-        super().__init__(self, cells, states)
+    def __init__(self, cells, state):
+        super().__init__(self, cells, state)
         
+'''
+This dummy rule is only here as an example to show what kind of rules can be implemented
+In essence the rule has the following inputs:
+Cell_position, state, neighbor_states
+And the output should be a integer for the state of the cell
+'''
+def dummy_rule(cell_position, state, neighbor_states):
+    return (state + 1) % 2  # toggles between 0 and 1
+                            # Does not use the cell_position or neighbor_states in the calculation
 
-        
-class two_dimensional(grid):
-    
 
-    def __init__(self, cells, states):
-        super().__init__(self, cells, states)
-        row = colomn = int(math.sqrt(cells))
-        print(row)
-
-
-
-        
-
-Automata = two_dimensional(16, 2)
+# A Twodimensional cellular automata is created with a grid of 5 by 5.
+# This is an instance of the two_dimensional class
+# The dummy rule is given as input
+# The cellular automata has 2 states
+# The cellular automata has fixed boundaries
+ca = TwoDimensional((5,5), dummy_rule, 2, boundary='fixed')
+# A cell in the grid with coordinates 2,2 is put at 1
+ca.cells[2, 2] = 1
+# Initial state is being printed
+print("Initial state: ", ca.cells)
+# Evolve function is called on the cellular automata
+ca.evolve()
+# End state is being printed
+print("\nAfter one evolution step:", ca.cells)

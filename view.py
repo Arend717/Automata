@@ -1,4 +1,4 @@
-# File: visual.py
+# File: view.py
 # This file handles the visualization of the CA grid using Pygame
 
 import pygame

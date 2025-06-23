@@ -4,8 +4,8 @@
 import pygame
 
 DEFAULT_COLORS = {
-    0: (10, 10, 10),        # dead cell
-    1: (255, 255, 255),     # alive cell
+    0: (151, 182, 186),        # dead cell
+    1: (219, 186, 94),     # alive cell
 }
 
 def draw_grid(screen, cells, size, colors=DEFAULT_COLORS):

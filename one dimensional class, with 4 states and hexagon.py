@@ -93,19 +93,28 @@ class hexagonal_grid(grid):
         
         self.grid = new_grid
 
-class cell:
-    def __init__(self, state=0, coordinates=None):
-        self.state = state
-        self.coordinates = coordinates
+class one_dimensional_4states(grid):
+    """1D cellular automaton with 4 states (0-3)"""
+    def __init__(self, cells):
+        super().__init__(cells, state=4)  # Fixed 4 states
+        self.grid = [0] * cells
+        self.history = []
     
-    def is_alive(self) -> bool:
-        return self.state == 1 
+    def get_neighbors(self, index):
+        """Get left and right neighbors"""
+        left = self.grid[(index - 1) % self.cells]
+        center = self.grid[index]
+        right = self.grid[(index + 1) % self.cells]
+        return left, center, right
     
-    def set_alive(self):
-        self.state = 1
-    
-    def set_dead(self):
-        self.state = 0
-    
-    def toggle(self):
-        self.state = 1 - self.state
+    def evolve(self):
+        """Evolution rule: sum of neighbors modulo 4"""
+        self.history.append(self.grid.copy())
+        new_grid = [0] * self.cells
+        
+        for i in range(self.cells):
+            left, center, right = self.get_neighbors(i)
+            neighbor_sum = left + center + right
+            new_grid[i] = neighbor_sum % 4  # mod 4 for 4 states
+        
+        self.grid = new_grid

@@ -1,9 +1,14 @@
 # File: view.py
-# This file handles the visualization of the CA grid using Pygame
+# Handles visualization using Pygame
 
 import pygame
 
-def draw_grid(screen, cells, size, colors):
+DEFAULT_COLORS = {
+    0: (10, 10, 10),        # dead cell
+    1: (255, 255, 255),     # alive cell
+}
+
+def draw_grid(screen, cells, size, colors=DEFAULT_COLORS):
     """
     Draws the entire grid on the screen.
     :param screen: Pygame screen surface
@@ -14,7 +19,7 @@ def draw_grid(screen, cells, size, colors):
     for row in range(len(cells)):
         for col in range(len(cells[0])):
             state = cells[row][col]
-            color = colors[state]
+            color = colors.get(state, (255, 0, 0))  # fallback = red
             pygame.draw.rect(
                 screen, color,
                 (col * size, row * size, size - 1, size - 1)

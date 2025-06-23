@@ -27,4 +27,4 @@ class TwoDimensional(Grid):
     this is because a rule will change based on a specific rule set
     '''
     def rule(self, cell_position, state, neighbor_states):
-        return self._rule_func(state, neighbor_states)
+        return self._rule_func(cell_position, state, neighbor_states)

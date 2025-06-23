@@ -64,7 +64,7 @@ class Grid(ABC):
     The function rule has to be in every subclass and will be defined there
     '''
     @abstractmethod
-    def rule(self, cell, state, neighbor_states):
+    def rule(self, cell_position, state, neighbor_states):
         pass
 
     '''

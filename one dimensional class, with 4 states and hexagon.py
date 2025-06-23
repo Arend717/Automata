@@ -29,6 +29,7 @@ class one_dimensional(grid):
         
         self.grid = new_grid
 
+
 class hexagonal_grid(grid):
     def __init__(self, radius, state=2):
         cells = 1 + 3 * radius * (radius + 1)

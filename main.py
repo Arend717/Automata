@@ -1,5 +1,7 @@
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
+from one_dimensional import one_dimensional  
+from rule30_rule import rule30
 
 import math
 
@@ -39,3 +41,15 @@ print("Initial state: ", ca.cells)
 ca.evolve()
 # End state is being printed
 print("\nAfter one evolution step:", ca.cells)
+
+
+# Create a 1D grid of 50 cells, 2 states, met Rule 30
+ca = one_dimensional(cells=50, state=2, rule_func=rule30)
+
+# Starting pattern, current example: only middle cell on 1
+ca.grid[25] = 1
+
+print("Initial:", ca.grid)
+
+ca.evolve()
+print("After 1 evolution:", ca.grid)

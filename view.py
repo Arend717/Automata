@@ -19,7 +19,7 @@ def draw_grid(screen, cells, size, colors=DEFAULT_COLORS):
     for row in range(len(cells)):
         for col in range(len(cells[0])):
             state = cells[row][col]
-            color = colors.get(state, (255, 0, 0))  # fallback = red
+            # color = colors.get(state, (255, 0, 0))  # fallback = red
             pygame.draw.rect(
                 screen, color,
                 (col * size, row * size, size - 1, size - 1)

@@ -23,14 +23,20 @@ running = True
 paused = False
 clock = pygame.time.Clock()
 
+## This is now double, in view.py and here needs to be cleaned up later 
+DEFAULT_COLORS = {
+    0: (227, 209, 166),        # dead cell
+    1: (38, 57, 74),     # alive cell
+}
+
 while running:
     screen.fill((0, 0, 0))
-    draw_grid(screen, ca.cells, cell_size)
+    draw_grid(screen, ca.cells, cell_size, colors=DEFAULT_COLORS)
     pygame.display.flip()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = True
+            running = False
 
         # Pause/unpause with SPACE
         elif event.type == pygame.KEYDOWN:
@@ -50,3 +56,9 @@ while running:
         clock.tick(5)  # Only evolve when not paused
 
 pygame.quit()
+
+
+if __name__ == "__main__":
+    main()
+
+    

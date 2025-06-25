@@ -1,79 +1,137 @@
 import pygame
 import sys
-from one_dimensional import one_dimensional
-from rule30_rule import rule30
 import random
+import numpy as np
+from rule30_rule import rule30
 
-# Set size of each cell and screen size
-CELL_SIZE = 5
-WIDTH = 101
-HEIGHT = 600
+# Screen dimensions and grid size
+CELL_SIZE = 8
+GRID_WIDTH = 180
+GRID_HEIGHT = 90
+SCREEN_WIDTH = GRID_WIDTH * CELL_SIZE
+SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
 
-# Set up colors
+# Colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Draw one row of cells on the screen at a vertical position y_offset
-def draw_row(screen, row, y_offset):
-    for i, cell in enumerate(row):
-        color = WHITE if cell == 1 else BLACK
-        pygame.draw.rect(screen, color, (i * CELL_SIZE, y_offset, CELL_SIZE, CELL_SIZE))
+class Rule30Grid:
+    def __init__(self, size, initial_state=None):
+        self.size = size
+        self.cells = np.zeros(size, dtype=int)
+        if initial_state is not None:
+            self.cells[:] = initial_state
 
-# Ask the user to press 1, 2 or 3 to choose a starting configuration
-def wait_for_choice():
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH * CELL_SIZE, HEIGHT))
-    pygame.display.set_caption("Rule 30 - Choose Start")
-    font = pygame.font.SysFont(None, 28)
+    def get_neighbors(self, i):
+        # Wrap around edges (circular)
+        left = (i - 1) % self.size
+        center = i
+        right = (i + 1) % self.size
+        return [self.cells[left], self.cells[center], self.cells[right]]
 
-    # Show message
+    def evolve(self):
+        new_cells = np.zeros_like(self.cells)
+        for i in range(self.size):
+            neighbors = self.get_neighbors(i)
+            new_cells[i] = rule30(i, self.cells[i], neighbors)
+        self.cells = new_cells
+
+def draw_grid(screen, grid, row):
+    """
+    Draw a single row of the cellular automaton.
+    """
+    for x in range(GRID_WIDTH):
+        color = WHITE if grid.cells[x] == 1 else BLACK
+        pygame.draw.rect(screen, color, (x * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+
+def show_start_screen(screen, font):
+    """
+    Display the start screen with 3 pattern choices.
+    """
     screen.fill(BLACK)
-    msg = font.render("Press 1 (standard), 2 (random) or 3 (symmetrical) to choose a starting pattern", True, WHITE)
-    screen.blit(msg, (20, HEIGHT // 2))
+    title = font.render("Choose a starting condition (1, 2, or 3):", True, WHITE)
+    opt1 = font.render("1: One cell in the middle", True, WHITE)
+    opt2 = font.render("2: Every 15th cell random", True, WHITE)
+    opt3 = font.render("3: Asymmetric wave pattern", True, WHITE)
+    screen.blit(title, (50, 100))
+    screen.blit(opt1, (50, 160))
+    screen.blit(opt2, (50, 200))
+    screen.blit(opt3, (50, 240))
     pygame.display.flip()
 
-    # Wait for key press
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.unicode in ['1', '2', '3']:
-                    return event.unicode
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    return initialize_case(1)
+                elif event.key == pygame.K_2:
+                    return initialize_case(2)
+                elif event.key == pygame.K_3:
+                    return initialize_case(3)
 
-# Set initial state based on chosen pattern
-def set_start_state(ca, choice):
-    if choice == '1':
-        ca.grid[WIDTH // 2] = 1  # Single live cell in the center
-    elif choice == '2':
-        ca.grid = [random.randint(0, 1) for _ in range(WIDTH)]  # Random
-    elif choice == '3':
-        center = WIDTH // 2
-        ca.grid[center - 1:center + 2] = [1, 1, 1]  # Three live cells in the center
+def initialize_case(case):
+    """
+    Initialize grid with selected starting pattern.
+    """
+    grid = Rule30Grid(GRID_WIDTH)
+    if case == 1:
+        grid.cells[GRID_WIDTH // 2] = 1  # Single center cell
+    elif case == 2:
+        for i in range(0, GRID_WIDTH, 15):
+            grid.cells[i] = random.choice([0, 1])  # Every 15th cell random
+    elif case == 3:
+        for i in range(GRID_WIDTH):
+        # Set cell active if the binary representation of i has an odd number of 1s
+        # This creates a complex, seemingly random initial pattern with some structure
+            if bin(i).count('1') % 2 == 1:
+                grid.cells[i] = 1
+    return grid
 
 def main():
-    ca = one_dimensional(WIDTH, 2, rule30)
-    set_start_state(ca, choice)
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Rule 30 - 1D Cellular Automaton")
+    font = pygame.font.SysFont(None, 28)
 
-    generation = 0
-    max_generations = HEIGHT // CELL_SIZE
-    screen.fill(BLACK)
+    clock = pygame.time.Clock()
+    grid = show_start_screen(screen, font)
 
+    history = []  # Stores previous generations
     running = True
-    while running and generation < max_generations:
-        draw_row(screen, ca.grid, generation * CELL_SIZE)
-        pygame.display.flip()
-        ca.step()
-        generation += 1
-        clock.tick(10)  # Slow down to 10 generations per second
+    paused = False
+    row = 0
 
-        # Check for quit or enter key
+    while running:
+        screen.fill(BLACK)
+
+        # Draw all previous generations
+        for i, past_grid in enumerate(history):
+            draw_grid(screen, past_grid, i)
+
+        # Draw current row and evolve if not paused
+        if not paused:
+            draw_grid(screen, grid, row)
+            # Append a copy of the grid to history
+            history.append(Rule30Grid(GRID_WIDTH, initial_state=np.copy(grid.cells)))
+
+            if row < GRID_HEIGHT - 1:
+                grid.evolve()
+                row += 1
+
+        pygame.display.flip()
+        clock.tick(10)  # 10 frames per second
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    running = False  # Exit on Enter
+                elif event.key == pygame.K_SPACE:
+                    paused = not paused  # Pause on Space
 
     pygame.quit()
 

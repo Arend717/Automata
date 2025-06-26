@@ -6,14 +6,20 @@ CELL_SIZE = 5  # Pixel size of each cell
 WINDOW_HEIGHT = 600  # Window height in pixels
 GRID_WIDTH = 100  # Number of cells in the grid
 COLORS = {
-    0: (255, 255, 255),  # White: dead
+    0: (255, 255, 255),  # White: inactive
     1: (0, 0, 0),        # Black: active
     2: (128, 128, 128)   # Gray: dormant
 }
 
-class 3states:
+class threestates_class:
     def __init__(self):
-        """Initialize three states from Rule 30 Cellular automaton rule table"""
+        """
+        Initialize one-dimensional three-state cellular automaton.
+        State definitions:
+        0 - Dead
+        1 - Active 
+        2 - Dormant
+        """
         self.rule_table = self._rule30_three_state_table()
         self.grid = [2] * GRID_WIDTH  # Initialize grid with dormant state
         self.grid[GRID_WIDTH // 2] = 1  # Set center cell to active
@@ -76,7 +82,7 @@ class 3states:
 pygame.init()
 screen = pygame.display.set_mode((GRID_WIDTH * CELL_SIZE, WINDOW_HEIGHT))
 pygame.display.set_caption("Three-State Rule 30")
-ca = CellularAutomaton()
+ca = threestates_class()
 
 # Main loop
 running = True
@@ -94,3 +100,4 @@ while running:
     pygame.time.delay(1000 // FPS)  # Delay in milliseconds for ~10 FPS
 
 pygame.quit()
+

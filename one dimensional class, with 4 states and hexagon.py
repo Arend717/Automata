@@ -94,28 +94,62 @@ class hexagonal_grid(grid):
         
         self.grid = new_grid
 
-class one_dimensional_4states(grid):
-    """1D cellular automaton with 4 states (0-3)"""
-    def __init__(self, cells):
-        super().__init__(cells, state=4)  # Fixed 4 states
-        self.grid = [0] * cells
-        self.history = []
-    
-    def get_neighbors(self, index):
-        """Get left and right neighbors"""
-        left = self.grid[(index - 1) % self.cells]
-        center = self.grid[index]
-        right = self.grid[(index + 1) % self.cells]
-        return left, center, right
-    
-    def evolve(self):
-        """Evolution rule: sum of neighbors modulo 4"""
-        self.history.append(self.grid.copy())
-        new_grid = [0] * self.cells
+class ThreeStates(Grid):
+     def __init__(self, size, n_states=3, rule_table=None, boundary='wrapped'):
+        """
+        Initialize one-dimensional three-state cellular automaton.
+        State definitions:
+        0 - Dead
+        1 - Active 
+        2 - Dormant
+        """
+        super().__init__(size, n_states, self.get_neighbors, boundary)
+        self.rule_table = rule_table if rule_table else self._rule30_three_state_table()
         
-        for i in range(self.cells):
-            left, center, right = self.get_neighbors(i)
-            neighbor_sum = left + center + right
-            new_grid[i] = neighbor_sum % 4  # mod 4 for 4 states
+        # Initialize: set different states in center and surroundings
+        mid = size // 2
+        self.cells[mid] = 1      # Center: active
+        self.cells[mid - 1] = 2  # Left: dormant
+        self.cells[mid + 1] = 2  # Right: dormant
         
-        self.grid = new_grid
+    def get_neighbors(self, pos):
+        """
+        Get 3 neighbors (left, center, right).
+        """
+        left = pos - 1
+        right = pos + 1
+        return [left, pos, right]
+    
+    def _rule30_three_state_table(self):
+        """
+        This is the three-state Rule 30 rule table I designed, with 27 items.
+        Based on the combination of neighbor states, simulate the complexity of Rule 30.
+        Index 0-26 corresponds to the enumeration from [0,0,0] to [2,2,2].
+
+        Rule design ideas:
+        Keep propagating
+        Use the dormant state as the third state
+        Create complex dynamic patterns
+        """ 
+        rule_table = [
+            # 000, 001, 002
+            0, 1, 0,
+            # 010, 011, 012  
+            1, 2, 1,
+            # 020, 021, 022
+            0, 1, 2,
+            # 100, 101, 102
+            1, 0, 2,
+            # 110, 111, 112
+            2, 1, 0,
+            # 120, 121, 122
+            1, 2, 1,
+            # 200, 201, 202
+            0, 2, 1,
+            # 210, 211, 212
+            2, 0, 2,
+            # 220, 221, 222
+            1, 2, 0
+        ]
+        return rule_table  # Length 27
+        

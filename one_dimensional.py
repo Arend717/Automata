@@ -1,32 +1,28 @@
-class grid:
-    def __init__(self, cells, state):
-        self.cells = cells  # number of cells 
-        self.states = list(range(0, state))
-        self.num_states = state
+# File: one_dimensional.py
 
+from grid import Grid
 
-class one_dimensional(grid):
-    def __init__(self, cells, state, rule_func):
-        super().__init__(cells, state)
-        self.grid = [0] * cells  # current state of cells 
-        self.history = []        # last generation 
-        self.rule_func = rule_func  
-    
-    def get_neighbors(self, index):
-        # neighbors: left, center, right with wrap-around (ring)
-        left = self.grid[(index - 1) % self.cells]
-        center = self.grid[index]
-        right = self.grid[(index + 1) % self.cells]
-        return (left, center, right)
-    
-    def evolve(self):
-        # add current generation to history 
-        self.history.append(self.grid.copy())
+'''
+The OneDimensional grid is derived from the general grid which means 
+that all functions in the general grid can also be used by the OneDimensional grid
+Altough to differentiate between derived grids, all derived grids shall have their own
+interpretation of functions where needed.
+In this case the init method which will always run when a new instance of this class is created
+Has a function neighbors_1d inside in which all the neighbors coordinates based on the coordinates of a cell
+are returned. 
+'''
+class OneDimensional(Grid):
+    def __init__(self, shape, rule_func, n_states = 2, boundary='wrapped'):
+        def neighbors_1d(cell_position):
+            return [cell_position[0] - 1, cell_position[0] + 1]
         
-        new_grid = [0] * self.cells
-        
-        for i in range(self.cells):
-            neighbors = self.get_neighbors(i)
-            new_grid[i] = self.rule_func(i, self.grid[i], neighbors)
-        
-        self.grid = new_grid
+        # This refers to the parent class Grid, and is needed to intialize shared logic from Grid
+        super().__init__(shape, n_states, neighbors_1d, boundary)
+        self._rule_func = rule_func
+
+    '''
+    The rule function is declared here but there is no implementation yet,
+    this is because a rule will change based on a specific rule set
+    '''
+    def rule(self, cell_position, state, neighbor_states):
+        return self._rule_func(cell_position, state, neighbor_states)

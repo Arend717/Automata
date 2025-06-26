@@ -6,7 +6,7 @@ CELL_SIZE = 5  # Pixel size of each cell
 WINDOW_HEIGHT = 600  # Window height in pixels
 GRID_WIDTH = 100  # Number of cells in the grid
 COLORS = {
-    0: (255, 255, 255),  # White: inactive
+    0: (255, 255, 255),  # White: dead
     1: (0, 0, 0),        # Black: active
     2: (128, 128, 128)   # Gray: dormant
 }

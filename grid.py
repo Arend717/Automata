@@ -1,3 +1,6 @@
+# File: grid.py
+# Generic ABC grid class to be used by derived (1,2,3,..)d classes
+
 import numpy as np
 from abc import ABC, abstractmethod
 

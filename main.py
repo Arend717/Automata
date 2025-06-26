@@ -24,6 +24,11 @@ SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
 # Colors used for dead and alive cells
 DEAD_COLOR = (227, 209, 166)
 ALIVE_COLOR = (38, 57, 74)
+THERE_STATES_COLORS = {
+    0: (255, 255, 255),  # White: dead
+    1: (0, 0, 0),        # Black: active
+    2: (128, 128, 128)   # Gray: dormant
+}
 
 
 # Draw the 2D grid (Game of Life style)
@@ -36,7 +41,9 @@ def draw_grid(screen, cells, size, alive_color=ALIVE_COLOR, dead_color=DEAD_COLO
 
 
 # Draw one row for Rule 30 automaton
-def draw_rule30_row(screen, cells, row_index):
+def draw_rule30_row(screen, cells, row_index, colors=None):
+    if colors is None:
+        colors = {0: DEAD_COLOR, 1: ALIVE_COLOR}
     for x in range(len(cells)):
         color = ALIVE_COLOR if cells[x] == 1 else DEAD_COLOR
         rect = pygame.Rect(x * CELL_SIZE, row_index * CELL_SIZE, CELL_SIZE, CELL_SIZE)
@@ -94,6 +101,7 @@ def run_rule30(screen, version):
         screen.fill(DEAD_COLOR)
 
         # Draw all previous generations from history
+        colors = THREE_STATE_COLORS if version == 4 else None  # Use specific colors for three states
         for i, past_cells in enumerate(grid.history):
             draw_rule30_row(screen, past_cells, i)
 
@@ -132,7 +140,7 @@ def main():
 
         if choice == 1:
             run_gol(screen)
-        elif choice in [2, 3, 4]:  # Rule 30 cases
+        elif choice in [2, 3, 4, 5]:  # Rule 30 cases
             run_rule30(screen, version=choice - 1)
 
 

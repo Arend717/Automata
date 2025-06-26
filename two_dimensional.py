@@ -1,9 +1,11 @@
+# File: two_dimensional.py
+
 from grid import Grid
         
 '''
 The TwoDimensional grid is derived from the general grid which means 
 that all functions in the general grid can also be used by the TwoDimensional grid
-Alltough to differentiate between derived grids, all derived grids shall have their own
+Altough to differentiate between derived grids, all derived grids shall have their own
 interpretation of functions where needed.
 In this case the init function which will always run when a new instance of this class is created
 Has a function neighbors_2d inside in which all the neighbors coordinates based on the coordinates of a cell

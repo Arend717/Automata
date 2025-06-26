@@ -131,25 +131,33 @@ class ThreeStates(Grid):
         Use the dormant state as the third state
         Create complex dynamic patterns
         """ 
-        rule_table = [
-            # 000, 001, 002
-            0, 1, 0,
-            # 010, 011, 012  
-            1, 2, 1,
-            # 020, 021, 022
-            0, 1, 2,
-            # 100, 101, 102
-            1, 0, 2,
-            # 110, 111, 112
-            2, 1, 0,
-            # 120, 121, 122
-            1, 2, 1,
-            # 200, 201, 202
-            0, 2, 1,
-            # 210, 211, 212
-            2, 0, 2,
-            # 220, 221, 222
-            1, 2, 0
-        ]
-        return rule_table  # Length 27
+        return {
+            # First digit = left, second = center, third = right
+            (0, 0, 0): 0, (0, 0, 1): 1, (0, 0, 2): 0,
+            (0, 1, 0): 1, (0, 1, 1): 2, (0, 1, 2): 1,
+            (0, 2, 0): 0, (0, 2, 1): 1, (0, 2, 2): 2,
+            
+            (1, 0, 0): 1, (1, 0, 1): 0, (1, 0, 2): 2,
+            (1, 1, 0): 2, (1, 1, 1): 1, (1, 1, 2): 0,
+            (1, 2, 0): 1, (1, 2, 1): 2, (1, 2, 2): 1,
+            
+            (2, 0, 0): 0, (2, 0, 1): 2, (2, 0, 2): 1,
+            (2, 1, 0): 2, (2, 1, 1): 0, (2, 1, 2): 2,
+            (2, 2, 0): 1, (2, 2, 1): 2, (2, 2, 2): 0
+        }
+    
+    def rule(self, cell_position, state, neighbor_states):
+        """
+        Apply three-state Rule 30 based on neighbor configuration.
+        Uses dictionary lookup for (left, center, right) patterns.
+        """
+        if len(neighbor_states) != 3:
+            return state
         
+        # Create dictionary key from neighbor states
+        left, center, right = neighbor_states
+        pattern = (left, center, right)
+        
+        # Return matching rule or keep current state if not found (shouldn't happen)
+        return self.rule_dict.get(pattern, state)
+    

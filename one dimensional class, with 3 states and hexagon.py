@@ -159,6 +159,6 @@ class ThreeStates(Grid):
         pattern = (left, center, right)
         
         # Return matching rule or keep current state if not found (shouldn't happen)
-        return return self.rule_table.get(pattern, state)
+        return self.rule_table.get(pattern, state)
 
     

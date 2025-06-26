@@ -48,17 +48,17 @@ class Grid(ABC):
                 wrapped_neighbors.append(wrapped)
             return wrapped_neighbors
         
-        # Dead neighbors arround grid edges
+        # Valid neighbors within grid edges
         elif self.boundary == 'fixed':
-            dead_neighbors = []
+            valid_neighbors = []
             for neighbor_pos in neighbors:
                 if isinstance(neighbor_pos, tuple):
                      if all(0 <= coord < dim_size for coord, dim_size in zip(neighbor_pos, self.shape)):
-                         dead_neighbors.append(neighbor_pos)
+                         valid_neighbors.append(neighbor_pos)
                 else:
                     if 0 <= neighbor_pos < self.shape[0]:
-                        dead_neighbors.append(neighbor_pos)
-            return dead_neighbors
+                        valid_neighbors.append(neighbor_pos)
+            return valid_neighbors
         else:
             raise ValueError("Unkown boundary condition: ", self.boundary)
 

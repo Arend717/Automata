@@ -51,7 +51,7 @@ def draw_rule30_row(screen, grid, row):
 def run_gol(screen):
     cell_size = CELL_SIZE
     grid_size = (GRID_HEIGHT, GRID_WIDTH)
-    ca = TwoDimensional(grid_size, gol_rule, 2, boundary='fixed')
+    ca = TwoDimensional(grid_size, gol_rule, boundary='fixed')
     ca.cells[GRID_HEIGHT//2, GRID_WIDTH//2 - 1:GRID_WIDTH//2 + 2] = 1
 
     clock = pygame.time.Clock()

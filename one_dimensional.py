@@ -12,12 +12,12 @@ Has a function neighbors_1d inside in which all the neighbors coordinates based 
 are returned. 
 '''
 class OneDimensional(Grid):
-    def __init__(self, shape, rule_func, n_states = 2, boundary='wrapped'):
+    def __init__(self, shape, rule_func, boundary='wrapped'):
         def neighbors_1d(cell_position):
             return [cell_position[0] - 1, cell_position[0] + 1]
         
         # This refers to the parent class Grid, and is needed to intialize shared logic from Grid
-        super().__init__(shape, n_states, neighbors_1d, boundary)
+        super().__init__(shape, neighbors_1d, boundary)
         self._rule_func = rule_func
 
     '''

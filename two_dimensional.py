@@ -13,7 +13,7 @@ are returned.
 In this function those neighbors are based on the Moore neighborhood with 8 neighbors
 '''
 class TwoDimensional(Grid):
-    def __init__(self, shape, rule_func, n_states = 2, boundary='wrapped'):
+    def __init__(self, shape, rule_func, boundary='wrapped'):
         def neighbors_2d(cell_position):
             y, x = cell_position
             return [(y + dy, x + dx)
@@ -21,7 +21,7 @@ class TwoDimensional(Grid):
                     for dx in (-1, 0, 1)
                     if not (dy == 0  and dx ==0)]
         # This refers to the parent class Grid, and is needed to intialize shared logic from Grid
-        super().__init__(shape, n_states, neighbors_2d, boundary)
+        super().__init__(shape, neighbors_2d, boundary)
         self._rule_func = rule_func
     
     '''

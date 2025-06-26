@@ -14,7 +14,7 @@ screen = pygame.display.set_mode((grid_size[1] * cell_size, grid_size[0] * cell_
 pygame.display.set_caption("Game of Life")
 
 # Create CA
-ca = TwoDimensional(grid_size, gol_rule, 2, boundary='fixed')
+ca = TwoDimensional(grid_size, gol_rule, boundary='fixed')
 ca.cells[12, 11:14] = 1
 ca.cells[11, 13] = 1
 ca.cells[10, 12] = 1

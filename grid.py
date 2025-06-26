@@ -9,13 +9,12 @@ The Grid ABC class is a generic class which can only be used by derived classes
 There can not be a instance created directly from this class since it is an ABC class
 The generic grid class can be used for:
 Any dimensional grid
-Any number of states
+Any number of states since dtype of np.cells is int
 Any amount of neighbors
 Boundary wrapped or fixed
 '''
 class Grid(ABC):
-    def __init__(self, size, n_states, neighbors, boundary='wrapped'):
-        self.n_states = n_states
+    def __init__(self, size, neighbors, boundary='wrapped'):
         self.neighbors = neighbors
         self.boundary = boundary
         

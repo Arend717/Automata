@@ -15,6 +15,5 @@ def rule30(cell_position, state, neighbor_states):
         (0, 0, 1): 1,
         (0, 0, 0): 0,
     }
-
-    key = tuple(neighbor_states)
+    key = (neighbor_states[0], state, neighbor_states[1])
     return rule_30.get(key, 0)

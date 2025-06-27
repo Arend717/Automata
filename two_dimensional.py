@@ -21,7 +21,7 @@ class TwoDimensional(Grid):
                     for dx in (-1, 0, 1)
                     if not (dy == 0 and dx == 0)]
         # This refers to the parent class Grid, and is needed to intialize shared logic from Grid
-        super().__init__(shape, n_states, neighbors_2d, boundary)
+        super().__init__(shape, neighbors_2d, boundary)
         self._rule_func = rule_func
 
     '''

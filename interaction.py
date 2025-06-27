@@ -7,7 +7,7 @@ import numpy as np
 
 # Custom modules for cellular automaton logic
 from rule30_rule import rule30
-from one_dimensional import one_dimensional
+from one_dimensional import OneDimensional
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
 
@@ -100,20 +100,16 @@ def handle_gol_events(event, ca, cell_size, grid_size):
 def initialize_case(case_number):
     grid_width = 100
 
-    # Case 0 and 1: Middle cell set to 1 (pyramid)
-    if case_number == 0: 
+    if case_number == 0 or case_number == 1:
         state = np.zeros(grid_width, dtype=int)
-        state[grid_width // 2] = 1
-    elif case_number == 1:
-        state = np.zeros(grid_width, dtype=int)
-        state[grid_width // 2] = 1
-
-    # Case 2: Every 20th cell gets random 0 or 1
+        state[grid_width // 2] = 1  # center cell
     elif case_number == 2:
         state = np.zeros(grid_width, dtype=int)
         for i in range(0, grid_width, 20):
-            state[i] = random.choice([0, 1])
-
-    # Case 3 (default): Fully random initial state
+            state[i] = random.choice([0, 1]) #every 20th cell random on or off 
     else:
-        state = np.random.randint(0, 2, size=grid_width)
+        state = np.random.randint(0, 2, size=grid_width) #classic starting conditions 
+
+    grid = OneDimensional(shape=(grid_width,), rule_func=rule30)
+    return grid, state.tolist()
+

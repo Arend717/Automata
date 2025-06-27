@@ -18,14 +18,38 @@ from interaction import (
 CELL_SIZE = 12
 GRID_WIDTH = 100   # number of columns
 GRID_HEIGHT = 50   # number of rows
-SCREEN_WIDTH = GRID_WIDTH * CELL_SIZE
+SIDE_BAR = int(GRID_WIDTH * CELL_SIZE / 5)
+FONT_SIZE = int(SIDE_BAR / 4)
+SCREEN_WIDTH = (GRID_WIDTH * CELL_SIZE) + SIDE_BAR
 SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
+
 
 # Colors used for dead and alive cells
 DEAD_COLOR = (227, 209, 166)
 ALIVE_COLOR = (38, 57, 74)
 DORMANT_COLOR = (171, 76, 3)
 
+# Draw the side bar to show timer-, alive- and dead-counter
+def draw_side_bar(screen, time_step, cells, x_offset=SCREEN_WIDTH, font_size = FONT_SIZE):
+    pygame.font.init()
+    font = pygame.font.SysFont(None, font_size)
+
+    sidebar_color = (40, 40 ,80)
+    sidebar_rect = pygame.Rect(SCREEN_WIDTH - SIDE_BAR, 0, SIDE_BAR, SCREEN_HEIGHT)
+    pygame.draw.rect(screen, sidebar_color, sidebar_rect)
+
+    alive = np.sum(cells)
+    total = cells.size
+    dead = total - alive
+    
+    time_text = font.render(f"Time: {time_step}", True, (255, 255, 255))
+    alive_text = font.render(f"Alive: {alive}", True, (0, 255, 0))
+    dead_text = font.render(f"Dead: {dead}", True, (255, 0, 0))
+    
+    screen.blit(time_text, (SCREEN_WIDTH - SIDE_BAR + 5, 50))
+    screen.blit(alive_text, (SCREEN_WIDTH - SIDE_BAR + 5, 90))
+    screen.blit(dead_text, (SCREEN_WIDTH - SIDE_BAR + 5, 130))
+    
 
 # Draw the 2D grid (Game of Life style)
 def draw_grid(screen, cells, size, alive_color=ALIVE_COLOR, dead_color=DEAD_COLOR):
@@ -56,10 +80,12 @@ def run_gol(screen):
     clock = pygame.time.Clock()
     paused = False
     running = True
+    time_step = 0
 
     while running:
         screen.fill(DEAD_COLOR)
-        draw_grid(screen, ca.cells, cell_size)  # draw current state
+        draw_grid(screen, ca.cells, cell_size, time_step)  # draw current state
+        draw_side_bar(screen, time_step, ca.cells, grid_size)
         pygame.display.flip()
 
         # Handle input and events
@@ -79,6 +105,7 @@ def run_gol(screen):
         # Advance simulation if not paused
         if not paused:
             ca.evolve()
+            time_step+=1
             clock.tick(5)  # 5 frames per second
 
 

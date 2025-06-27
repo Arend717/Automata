@@ -5,7 +5,7 @@ import sys
 # Importing custom modules for simulation rules and interactions
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
-from one_dimensional import one_dimensional
+from one_dimensional import OneDimensional
 from rule30_rule import rule30
 from interaction import (
     show_start_menu,
@@ -50,7 +50,7 @@ def run_gol(screen):
     grid_size = (GRID_HEIGHT, GRID_WIDTH)
 
     # Initialize the 2D automaton with a fixed boundary and central pattern
-    ca = TwoDimensional(grid_size, gol_rule, 2, boundary='fixed')
+    ca = TwoDimensional(grid_size, gol_rule, boundary='fixed')
     ca.cells[GRID_HEIGHT // 2, GRID_WIDTH // 2 - 1:GRID_WIDTH // 2 + 2] = 1  # initial 3-cell "blinker"
 
     clock = pygame.time.Clock()
@@ -85,39 +85,51 @@ def run_gol(screen):
 # Run the Rule 30 (1D) automaton
 def run_rule30(screen, version):
     clock = pygame.time.Clock()
-    grid = initialize_case(version)  # initialize based on user's choice
+    grid, state = initialize_case(version)
+    current_state = state
+    history = []
 
     paused = False
     running = True
-    row = 0  # current row to draw
+    row = 0
 
     while running:
         screen.fill(DEAD_COLOR)
 
-        # Draw all previous generations from history
-        for i, past_cells in enumerate(grid.history):
-            draw_rule30_row(screen, past_cells, i)
+        # Draw previous generations
+        for i, past in enumerate(history):
+            draw_rule30_row(screen, past, i)
 
-        # Add new row if not paused and grid height not exceeded
+        # Draw current state
         if not paused and row < GRID_HEIGHT:
-            draw_rule30_row(screen, grid.grid, row)
-            grid.evolve()
+            draw_rule30_row(screen, current_state, row)
+            history.append(current_state.copy())
+
+            new_state = []
+            for i in range(len(current_state)):
+                left = current_state[(i - 1) % len(current_state)]
+                center = current_state[i]
+                right = current_state[(i + 1) % len(current_state)]
+                neighbors = (left, center, right)
+                new_val = grid.rule((i,), center, neighbors)
+                new_state.append(new_val)
+
+            current_state = new_state
             row += 1
 
         pygame.display.flip()
-        clock.tick(10)  # 10 frames per second
+        clock.tick(10)
 
-        # Handle input and events
+        # Handle input
         for event in pygame.event.get():
             result = handle_common_events(event)
             if result == "exit":
                 pygame.quit()
                 sys.exit()
             elif result == "menu":
-                return  # back to start menu
+                return
             elif result == "pause":
                 paused = not paused
-
 
 # Entry point of the program
 def main():

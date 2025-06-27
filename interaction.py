@@ -1,4 +1,4 @@
-file: interaction.py
+# file: interaction.py
 
 import pygame
 import sys
@@ -7,7 +7,7 @@ import numpy as np
 
 # Custom modules for cellular automaton logic
 from rule30_rule import rule30
-from one_dimensional import one_dimensional
+from one_dimensional import OneDimensional
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
 from threestates_class import threestates_class
@@ -118,12 +118,12 @@ def initialize_case(case_number):
             state[i] = random.choice([0, 1])
 
     # Case 3 (default): Fully random initial state
-    else:
+    elif case_number == 3:
         state = np.random.randint(0, 2, size=grid_width)
 
     # Case 4：threestates Rule 30
-    elif case_number == 4:
+    else:
         return threestates_class()
 
     # Return a one-dimensional automaton using Rule 30
-    return one_dimensional(cells=grid_width, state=2, rule_func=rule30, initial_state=state)
+    return OneDimensional(cells=grid_width, rule_func=rule30, initial_state=state)

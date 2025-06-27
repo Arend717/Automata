@@ -5,7 +5,7 @@ import sys
 # Importing custom modules for simulation rules and interactions
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
-from one_dimensional import one_dimensional
+from one_dimensional import OneDimensional
 from rule30_rule import rule30
 from interaction import (
     show_start_menu,

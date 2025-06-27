@@ -13,7 +13,7 @@ are returned.
 In this function those neighbors are based on the Moore neighborhood with 8 neighbors
 '''
 class TwoDimensional(Grid):
-    def __init__(self, shape, rule_func, n_states=2, boundary='wrapped'):
+    def __init__(self, shape, rule_func, boundary='wrapped'):
         def neighbors_2d(cell_position):
             y, x = cell_position
             return [(y + dy, x + dx)

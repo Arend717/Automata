@@ -2,8 +2,8 @@ import pygame
 
 # Global constants
 FPS = 10  # Frames per second, controls evolution speed
-CELL_SIZE = 5  # Pixel size of each cell
-WINDOW_HEIGHT = 600  # Window height in pixels
+CELL_SIZE = 12  # Pixel size of each cell
+WINDOW_HEIGHT = 50  # Window height in pixels
 GRID_WIDTH = 100  # Number of cells in the grid
 COLORS = {
     0: (255, 255, 255),  # White: dead

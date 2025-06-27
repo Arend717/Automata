@@ -117,4 +117,3 @@ def initialize_case(case_number):
     # Case 3 (default): Fully random initial state
     else:
         state = np.random.randint(0, 2, size=grid_width)
-

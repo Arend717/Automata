@@ -24,6 +24,7 @@ SCREEN_HEIGHT = GRID_HEIGHT * CELL_SIZE
 # Colors used for dead and alive cells
 DEAD_COLOR = (227, 209, 166)
 ALIVE_COLOR = (38, 57, 74)
+DORMANT_COLOR = (171, 76, 3)
 
 
 # Draw the 2D grid (Game of Life style)

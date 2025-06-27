@@ -7,10 +7,9 @@ import numpy as np
 
 # Custom modules for cellular automaton logic
 from rule30_rule import rule30
-from one_dimensional import OneDimensional
+from one_dimensional import one_dimensional
 from two_dimensional import TwoDimensional
 from gol_rule import gol_rule
-from threestates_class import threestates_class
 
 # Grid and screen settings
 CELL_SIZE = 12
@@ -31,7 +30,6 @@ MENU_OPTIONS = [
     "2. Rule 30 - Symmetric Start (pyramid)",
     "3. Rule 30 - Random Start",
     "4. Rule 30 - Classic"
-    "5. Three-State Rule 30"
 ]
 
 # --------------------------
@@ -51,7 +49,7 @@ def show_start_menu(screen, font):
             screen.blit(text, (100, 100 + i * (FONT_SIZE + 20)))
 
         # Draw the welcome prompt
-        prompt = font.render("Welcome to CA! Press 1-5 to choose.", True, HIGHLIGHT_COLOR)
+        prompt = font.render("Welcome to CA! Press 1-4 to choose.", True, HIGHLIGHT_COLOR)
         screen.blit(prompt, (100, 100 + len(MENU_OPTIONS) * (FONT_SIZE + 30)))
 
         pygame.display.flip()
@@ -63,14 +61,13 @@ def show_start_menu(screen, font):
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 # Only allow keys 1-4 to make a selection
-                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5]:
+                if event.key in [pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4]:
                     selected_option = int(event.unicode)
     return selected_option
 
 # --------------------------
 # Shared key event handling
 # --------------------------
-
 def handle_common_events(event):
     if event.type == pygame.QUIT: 
         return "exit"  # User clicks close window
@@ -118,12 +115,9 @@ def initialize_case(case_number):
             state[i] = random.choice([0, 1])
 
     # Case 3 (default): Fully random initial state
-    elif case_number == 3:
+    else:
         state = np.random.randint(0, 2, size=grid_width)
 
-    # Case 4：threestates Rule 30
-    else:
-        return threestates_class()
-
     # Return a one-dimensional automaton using Rule 30
-    return OneDimensional(cells=grid_width, rule_func=rule30, initial_state=state)
+    return one_dimensional(cells=grid_width, state=2, rule_func=rule30, initial_state=state)
+

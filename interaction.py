@@ -118,6 +118,3 @@ def initialize_case(case_number):
     else:
         state = np.random.randint(0, 2, size=grid_width)
 
-    # Return a one-dimensional automaton using Rule 30
-    return one_dimensional(cells=grid_width, state=2, rule_func=rule30, initial_state=state)
-
